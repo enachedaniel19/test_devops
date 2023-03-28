@@ -50,5 +50,5 @@ jobs:
         with:
           app-name: 'basic-html-app'
           slot-name: 'production'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_8008f41b8c4849e49d3369a8d1cd6e5c }}
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile_basic_html_app }}
           package: .
