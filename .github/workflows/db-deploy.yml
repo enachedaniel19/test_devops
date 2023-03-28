@@ -23,7 +23,7 @@ jobs:
 
       - name: Create SQL Database
         run: |
-          az sql server create --resource-group test_devops --name basic-sql-server --location './test.sql' --admin-user daniel --admin-password 1234%asdF
+          az sql server create --resource-group test_devops --name basic-sql-server --location westeurope --admin-user daniel --admin-password 1234%asdF
           az sql db create --resource-group test_devops --server basic-sql-server --name basic-sql-database --sample-name AdventureWorksLT --edition Basic
 
       - name: Deploy SQL Scripts to Azure SQL Database
