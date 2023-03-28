@@ -1,0 +1,36 @@
+name: Deploy SQL Database
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Setup Azure CLI
+        uses: azure/setup-azure-cli@v1
+        with:
+          version: 'latest'
+
+      - name: Login via Azure CLI
+        run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+
+      - name: Create SQL Database
+        run: |
+          az sql server create --resource-group test_devops --name basic-sql-server --location './test.sql' --admin-user daniel --admin-password 1234%asdF
+          az sql db create --resource-group test_devops --server basic-sql-server --name basic-sql-database --sample-name AdventureWorksLT --edition Basic
+
+      - name: Deploy SQL Scripts to Azure SQL Database
+        uses: azure/sql-action@v1
+        with:
+          server-name: basic-sql-server
+          database-name: basic-sql-database
+          admin-login: daniel
+          admin-password: 1234%asdF
+          sql-file: './test.sql'
